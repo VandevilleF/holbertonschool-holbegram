@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'widgets/text_field.dart';
+
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +61,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -111,6 +116,25 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 20),
+
+            // 👇 Email field
+            TextFieldInput(
+              controller: emailController,
+              ispassword: false,
+              hintText: 'Email',
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 20),
+
+            // 👇 Password field
+            TextFieldInput(
+              controller: passwordController,
+              ispassword: true,
+              hintText: 'Password',
+              keyboardType: TextInputType.text,
+              suffixIcon: Icon(Icons.visibility_off),
             ),
           ],
         ),
