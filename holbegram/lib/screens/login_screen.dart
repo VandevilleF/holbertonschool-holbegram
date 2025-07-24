@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: Alignment.bottomLeft,
                       onPressed: _passwordVisibleToggle,
                       icon: Icon(
-                        _passwordVisible ? Icons.visibility : Icons.visibility_off
+                        !_passwordVisible ? Icons.visibility : Icons.visibility_off
                         ),
                       ),
                   ),
