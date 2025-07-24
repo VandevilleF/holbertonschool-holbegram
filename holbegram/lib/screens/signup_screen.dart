@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holbegram/screens/login_screen.dart';
 import 'package:holbegram/widgets/text_field.dart';
 
 class SignUp extends StatefulWidget {
@@ -135,7 +136,17 @@ class _SignUpState extends State<SignUp> {
                         children: [
                           Text("Have an account?"),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(
+                                  emailController: TextEditingController(),
+                                  passwordController: TextEditingController(),
+                                ),
+                              ),
+                            );
+                          },
                             child: Text(
                               ' Log in',
                               style: TextStyle(
