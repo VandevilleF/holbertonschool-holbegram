@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holbegram/methods/auth_methods.dart';
 import 'package:holbegram/screens/signup_screen.dart';
 import 'package:holbegram/widgets/text_field.dart';
 
@@ -36,6 +37,22 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _passwordVisible = !_passwordVisible;
     });
+  }
+
+  void _handleLogin() async {
+    String result = await AuthMethode().login(
+      email: widget.emailController.text,
+      password: widget.passwordController.text,
+      );
+      if (!mounted) return;
+      if (result == 'success') {
+        const snackbar = SnackBar(content: Text('Login'));
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home())
+        );
+      }
   }
 
   @override
@@ -89,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Color.fromARGB(218, 226, 37, 24),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: (_handleLogin),
                       child: Text(
                         'Log in',
                         style: TextStyle(color: Colors.white),
@@ -125,7 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   emailController: TextEditingController(),
                                   usernameController: TextEditingController(),
                                   passwordController: TextEditingController(),
-                                  passwordConfirmController: TextEditingController(),
+                                  passwordConfirmController:
+                                      TextEditingController(),
                                 ),
                               ),
                             );
