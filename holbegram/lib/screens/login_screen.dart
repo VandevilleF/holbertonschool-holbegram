@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holbegram/methods/auth_methods.dart';
+import 'package:holbegram/screens/home.dart';
 import 'package:holbegram/screens/signup_screen.dart';
 import 'package:holbegram/widgets/text_field.dart';
 
