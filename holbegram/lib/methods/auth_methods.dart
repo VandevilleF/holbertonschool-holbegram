@@ -43,25 +43,47 @@ class AuthMethode {
 
       User? user = userCredential.user;
 
-      if(user != null) {
+      if (user != null) {
         Users users = Users(
-        uid: user.uid,
-        email: email,
-        username: username,
-        bio: '',
-        photoUrl: '',
-        followers: [],
-        following: [],
-        posts: [],
-        saved: [],
-        searchKey: username.toLowerCase(),
-      );
-      await _firestore.collection("users").doc(user.uid).set(users.toJson());
-      return ('success');
+          uid: user.uid,
+          email: email,
+          username: username,
+          bio: '',
+          photoUrl: '',
+          followers: [],
+          following: [],
+          posts: [],
+          saved: [],
+          searchKey: username.toLowerCase(),
+        );
+        await _firestore.collection("users").doc(user.uid).set(users.toJson());
+        return ('success');
       }
       return ('An unexpected error occurred');
     } catch (error) {
       return (error.toString());
+    }
+  }
+
+  Future<Users> getUserDetails() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return Future.value(
+        Users(
+          uid: user.uid,
+          email: user.email ?? '',
+          username: '',
+          bio: '',
+          photoUrl: '',
+          followers: [],
+          following: [],
+          posts: [],
+          saved: [],
+          searchKey: '',
+        ),
+      );
+    } else {
+      return Future.error('No user is currently signed in.');
     }
   }
 }
