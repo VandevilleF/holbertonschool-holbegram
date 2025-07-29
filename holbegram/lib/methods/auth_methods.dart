@@ -33,7 +33,7 @@ class AuthMethode {
     Uint8List? file,
   }) async {
     try {
-      if (email.isNotEmpty || password.isNotEmpty || username.isNotEmpty) {
+      if (email.isEmpty || password.isEmpty || username.isEmpty) {
         return ('Please fill all the fields');
       }
       final userCredential = await _auth.createUserWithEmailAndPassword(

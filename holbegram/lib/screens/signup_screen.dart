@@ -56,12 +56,14 @@ class _SignUpState extends State<SignUp> {
     if (result == 'success') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AddPicture(
-          email: widget.emailController.text,
-          password: widget.passwordController.text,
-          username: widget.usernameController.text
-          )
-          ));
+        MaterialPageRoute(
+          builder: (context) => AddPicture(
+            email: widget.emailController.text,
+            password: widget.passwordController.text,
+            username: widget.usernameController.text,
+          ),
+        ),
+      );
     }
   }
 

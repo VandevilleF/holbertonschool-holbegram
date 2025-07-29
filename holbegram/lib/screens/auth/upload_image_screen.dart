@@ -85,14 +85,22 @@ class _AddPictureState extends State<AddPicture> {
               child: Column(
                 children: [
                   SizedBox(height: 24),
-                  if (_image == null)
-                    Image.asset(
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: _image == null
+                    ? Image.asset(
                       'assets/images/Sample_User_Icon.png',
                       width: 200,
                       height: 200,
-                    )
-                  else
-                    Image.memory(_image!, width: 200, height: 200),
+                      fit: BoxFit.cover,
+                      )
+                      : Image.memory(
+                        _image!,
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                        ),
+                      ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -103,6 +111,7 @@ class _AddPictureState extends State<AddPicture> {
                         ),
                         onPressed: selectImageFromGallery,
                       ),
+                      SizedBox(width: 50),
                       IconButton(
                         icon: FaIcon(
                           FontAwesomeIcons.camera,
@@ -112,9 +121,8 @@ class _AddPictureState extends State<AddPicture> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 28),
                   SizedBox(
-                    height: 48,
-                    width: double.minPositive,
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(
