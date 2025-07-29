@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:holbegram/screens/auth/upload_image_screen.dart';
 import 'package:holbegram/screens/login_screen.dart';
 import 'package:holbegram/widgets/text_field.dart';
+import 'package:holbegram/methods/auth_methods.dart';
 
 class SignUp extends StatefulWidget {
   final TextEditingController emailController;
@@ -39,7 +41,28 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _passwordVisibleToggle() {
-    setState(() {_passwordVisible = !_passwordVisible;});
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
+  }
+
+  void _handleSignUp() async {
+    String result = await AuthMethode().signUpUser(
+      email: widget.emailController.text,
+      password: widget.passwordController.text,
+      username: widget.usernameController.text,
+    );
+    if (!mounted) return;
+    if (result == 'success') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AddPicture(
+          email: widget.emailController.text,
+          password: widget.passwordController.text,
+          username: widget.usernameController.text
+          )
+          ));
+    }
   }
 
   @override
@@ -53,21 +76,16 @@ class _SignUpState extends State<SignUp> {
             SizedBox(height: 28),
             Text(
               'Holbegram',
-            style: TextStyle(fontFamily: 'Billabong', fontSize: 50)
+              style: TextStyle(fontFamily: 'Billabong', fontSize: 50),
             ),
-            Image.asset(
-              'assets/images/logo.webp',
-              width: 80,
-              height: 60,
-              ),
-              SizedBox(height: 28),
-              Text(
-                'Sign up to see photos and videos from your friends.',
-                style: TextStyle(
-                  fontSize: 20
-                ),
-                ),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 20),
+            Image.asset('assets/images/logo.webp', width: 80, height: 60),
+            SizedBox(height: 28),
+            Text(
+              'Sign up to see photos and videos from your friends.',
+              style: TextStyle(fontSize: 20),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   SizedBox(height: 24),
@@ -94,9 +112,11 @@ class _SignUpState extends State<SignUp> {
                       alignment: Alignment.bottomLeft,
                       onPressed: _passwordVisibleToggle,
                       icon: Icon(
-                        !_passwordVisible ? Icons.visibility : Icons.visibility_off
-                        ),
+                        !_passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
+                    ),
                   ),
                   SizedBox(height: 24),
                   TextFieldInput(
@@ -108,9 +128,11 @@ class _SignUpState extends State<SignUp> {
                       alignment: Alignment.bottomLeft,
                       onPressed: _passwordVisibleToggle,
                       icon: Icon(
-                        !_passwordVisible ? Icons.visibility : Icons.visibility_off
-                        ),
+                        !_passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
+                    ),
                   ),
                   SizedBox(height: 28),
                   SizedBox(
@@ -118,25 +140,27 @@ class _SignUpState extends State<SignUp> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(Color.fromARGB(218, 226, 37, 24),)
+                        backgroundColor: WidgetStateProperty.all(
+                          Color.fromARGB(218, 226, 37, 24),
+                        ),
                       ),
-                      onPressed: () {},
+                      onPressed: _handleSignUp,
                       child: Text(
                         'Sign up',
                         style: TextStyle(color: Colors.white),
                       ),
-                      ),
                     ),
-                    SizedBox(height: 24),
-                    Divider(thickness: 2),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Have an account?"),
-                          TextButton(
-                            onPressed: () {
+                  ),
+                  SizedBox(height: 24),
+                  Divider(thickness: 2),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Have an account?"),
+                        TextButton(
+                          onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -147,21 +171,21 @@ class _SignUpState extends State<SignUp> {
                               ),
                             );
                           },
-                            child: Text(
-                              ' Log in',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(218, 226, 37, 24),
-                                ),
+                          child: Text(
+                            ' Log in',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(218, 226, 37, 24),
                             ),
                           ),
-                        ],
-                      ),
-                      ),
-                      SizedBox(height: 10),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
                 ],
               ),
-              ),
+            ),
           ],
         ),
       ),

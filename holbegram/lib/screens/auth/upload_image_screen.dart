@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:holbegram/methods/auth_methods.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddPicture extends StatefulWidget {
@@ -43,6 +44,21 @@ class _AddPictureState extends State<AddPicture> {
       });
     }
   }
+
+  void _handleSignUpUser() async {
+    String result = await AuthMethode().signUpUser(
+      email: widget.email,
+      password: widget.password,
+      username: widget.username,
+      file: _image,
+    );
+    if (!mounted) return;
+    if (result == 'success') {
+      const snackbar = SnackBar(content: Text('success'));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,28 +76,23 @@ class _AddPictureState extends State<AddPicture> {
             SizedBox(height: 28),
             Text(
               'Hello ${widget.username} Welcome to Holbergam.',
-              style: TextStyle(
-                fontSize: 20
-              ),
+              style: TextStyle(fontSize: 20),
             ),
             Text('Choose an image from your gallery or take a new one.'),
             SizedBox(height: 48),
-            Padding(padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                SizedBox(height: 24),
-                if (_image == null)
-                  Image.asset(
-                    'assets/images/Sample_User_Icon.png',
-                    width: 200,
-                    height: 200,
-                  )
-                else
-                  Image.memory(
-                    _image!,
-                    width: 200,
-                    height: 200
-                  ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  SizedBox(height: 24),
+                  if (_image == null)
+                    Image.asset(
+                      'assets/images/Sample_User_Icon.png',
+                      width: 200,
+                      height: 200,
+                    )
+                  else
+                    Image.memory(_image!, width: 200, height: 200),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -91,14 +102,14 @@ class _AddPictureState extends State<AddPicture> {
                           color: Color.fromARGB(218, 226, 37, 24),
                         ),
                         onPressed: selectImageFromGallery,
-                        ),
+                      ),
                       IconButton(
                         icon: FaIcon(
                           FontAwesomeIcons.camera,
                           color: Color.fromARGB(218, 226, 37, 24),
                         ),
                         onPressed: selectImageFromCamera,
-                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -110,16 +121,16 @@ class _AddPictureState extends State<AddPicture> {
                           Color.fromARGB(218, 226, 37, 24),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: _handleSignUpUser,
                       child: Text(
                         'Next',
                         style: TextStyle(color: Colors.white),
                       ),
-                      ),
+                    ),
                   ),
-              ],
+                ],
+              ),
             ),
-            )
           ],
         ),
       ),
