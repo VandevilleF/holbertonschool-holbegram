@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 
 class Posts extends StatefulWidget {
-  const Posts({Key? key}) : super(key: key);
+  const Posts({super.key});
 
   @override
   State<Posts> createState() => _PostsState();
