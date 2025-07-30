@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:holbegram/screens/login_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:holbegram/methods/auth_methods.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -88,19 +89,19 @@ class _AddPictureState extends State<AddPicture> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: _image == null
-                    ? Image.asset(
-                      'assets/images/Sample_User_Icon.png',
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      )
-                      : Image.memory(
-                        _image!,
-                        width: 200,
-                        height: 200,
-                        fit: BoxFit.cover,
-                        ),
-                      ),
+                        ? Image.asset(
+                            'assets/images/Sample_User_Icon.png',
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.memory(
+                            _image!,
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
