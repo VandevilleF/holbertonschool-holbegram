@@ -9,8 +9,8 @@ Future<void> keyEnv() async {
 }
 
 class StorageMethods {
-  final String cloudinaryUrl = "https://api.cloudinary.com/v1_1/${dotenv.env['COULD_NAME']}/image/upload";
-  final String cloudinaryPreset = dotenv.env['PRESET_KEY'] ?? '';
+  final String cloudinaryUrl = "https://api.cloudinary.com/v1_1/dfowm4moz/image/upload";
+  final String cloudinaryPreset = "preset_holbegram";
 
   Future<String> uploadImageToStorage(
     bool isPost,
@@ -22,7 +22,7 @@ class StorageMethods {
     var request = http.MultipartRequest('POST', uri);
     request.fields['upload_preset'] = cloudinaryPreset;
     request.fields['folder'] = childName;
-    request.fields['public_id'] = isPost ? uniqueId : '';
+    request.fields['public_id'] = uniqueId;
 
     var multipartFile = http.MultipartFile.fromBytes(
       'file',
@@ -41,7 +41,7 @@ class StorageMethods {
     }
   }
   Future<void> deleteImageFromStorage(String publicId) async {
-    final String deleteUrl = "https://api.cloudinary.com/v1_1/${dotenv.env['COULD_NAME']}/image/destroy";
+    final String deleteUrl = "https://api.cloudinary.com/v1_1/dfowm4moz/image/destroy";
 
     var uri = Uri.parse(deleteUrl);
     var request = http.MultipartRequest('POST', uri);

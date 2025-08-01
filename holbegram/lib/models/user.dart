@@ -28,7 +28,11 @@ class Users {
   // Charge les données depuis firestore (récupération d'un document depuis Firebase)
   // Uers.fromSnap() pour lire depuis Firestore
   static Users fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+    final data = snap.data();
+    if (data == null) {
+      throw Exception("User document doesn't exist.");
+      }
+    var snapshot = data as Map<String, dynamic>;
     return Users(
       uid: snapshot['uid'],
       email: snapshot['email'],

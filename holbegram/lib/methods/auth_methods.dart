@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:holbegram/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:holbegram/screens/auth/methods/user_storage.dart';
 
 class AuthMethode {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,55 +34,57 @@ class AuthMethode {
     Uint8List? file,
   }) async {
     try {
-      if (email.isEmpty || password.isEmpty || username.isEmpty) {
+      if (email.isEmpty ||
+          password.isEmpty ||
+          username.isEmpty ||
+          file == null) {
         return ('Please fill all the fields');
       }
-      final userCredential = await _auth.createUserWithEmailAndPassword(
+
+      UserCredential cred = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      User? user = userCredential.user;
+      User? user = cred.user;
+      if (user == null) return 'User creation failed (no user returned)';
 
-      if (user != null) {
-        Users users = Users(
-          uid: user.uid,
-          email: email,
-          username: username,
-          bio: '',
-          photoUrl: '',
-          followers: [],
-          following: [],
-          posts: [],
-          saved: [],
-          searchKey: username.toLowerCase(),
-        );
-        await _firestore.collection("users").doc(user.uid).set(users.toJson());
-        return ('success');
-      }
-      return ('An unexpected error occurred');
+      String photoUrl = await StorageMethods().uploadImageToStorage(
+        false,
+        'profilePics',
+        file,
+      );
+
+      Users users = Users(
+        uid: user.uid,
+        email: email,
+        username: username,
+        bio: '',
+        photoUrl: photoUrl,
+        followers: [],
+        following: [],
+        posts: [],
+        saved: [],
+        searchKey: username.toLowerCase(),
+      );
+
+      await _firestore.collection("users").doc(user.uid).set(users.toJson());
+
+      return 'success';
     } catch (error) {
-      return (error.toString());
+      return error.toString();
     }
   }
 
-  Future<Users> getUserDetails() {
+  Future<Users> getUserDetails() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      return Future.value(
-        Users(
-          uid: user.uid,
-          email: user.email ?? '',
-          username: '',
-          bio: '',
-          photoUrl: '',
-          followers: [],
-          following: [],
-          posts: [],
-          saved: [],
-          searchKey: '',
-        ),
-      );
+      final snap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      return Users.fromSnap(snap);
     } else {
       return Future.error('No user is currently signed in.');
     }

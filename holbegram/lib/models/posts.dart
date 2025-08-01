@@ -22,14 +22,16 @@ class Post {
   // Chargé depuis firestore
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      caption: json['caption'],
-      uid: json['uid'],
-      username: json['username'],
-      likes: List.from(json['likes']),
-      postId: json['postId'],
-      datePublished: DateTime.parse(json['datePublished']),
-      postUrl: json['postUrl'],
-      profImage: json['profImage'],
+      caption: json['caption'] ?? "",
+      uid: json['uid'] ?? "",
+      username: json['username'] ?? "Unknow",
+      likes: json['likes'] != null ? List.from(json['likes']) : [],
+      postId: json['postId'] ?? "",
+      datePublished: json['datePublished'] != null
+        ? DateTime.parse(json['datePublished'])
+        : DateTime.now(),
+      postUrl: json['postUrl'] ?? "https://res.cloudinary.com/dfowm4moz/image/upload/v1754048439/profilePics/56d0e5c0-6ecc-11f0-8df7-f91e4c3f0c86.jpg",
+      profImage: json['profImage'] ?? "https://res.cloudinary.com/dfowm4moz/image/upload/v1754048439/profilePics/56d0e5c0-6ecc-11f0-8df7-f91e4c3f0c86.jpg",
     );
   }
 

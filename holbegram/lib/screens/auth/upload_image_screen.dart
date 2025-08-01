@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:holbegram/screens/home.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:holbegram/methods/auth_methods.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -56,6 +57,7 @@ class _AddPictureState extends State<AddPicture> {
     if (result == 'success') {
       const snackbar = SnackBar(content: Text('success'));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     }
   }
 

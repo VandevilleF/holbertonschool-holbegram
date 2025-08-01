@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:holbegram/models/posts.dart';
 import 'package:holbegram/screens/pages/methods/post_storage.dart';
 import '../models/user.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,12 @@ class _PostsState extends State<Posts> {
 
   @override
   Widget build(BuildContext context) {
-    final Users user = Provider.of<UserProvider>(context).user;
+    final userProvider = Provider.of<UserProvider>(context);
+    final Users? user = userProvider.user;
+
+    if (user == null) {
+    return Center(child: CircularProgressIndicator());
+  }
 
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection('posts').snapshots(),
@@ -42,12 +48,14 @@ class _PostsState extends State<Posts> {
               return Center(child: CircularProgressIndicator());
             }
 
-            final posts = snapshot.data!.docs;
+            final posts = snapshot.data!.docs.map((doc) => Post.fromJson(doc.data())).toList();
 
             return ListView.builder(
               itemCount: posts.length,
               itemBuilder: (context, index) {
-                final data = posts[index].data();
+                final post = posts[index];
+                final postData = snapshot.data!.docs[index].data();
+                final publicId = postData['publicId'];
 
                 return SingleChildScrollView(
                   child: Container(
@@ -63,7 +71,6 @@ class _PostsState extends State<Posts> {
                     ),
                     child: Column(
                       children: [
-                        // Header avec image de profil et pseudo
                         Container(
                           padding: EdgeInsets.all(8.0),
                           child: Row(
@@ -74,21 +81,24 @@ class _PostsState extends State<Posts> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                    image: NetworkImage(data['profImage']),
+                                    image: NetworkImage(post.profImage),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                               SizedBox(width: 10),
                               Text(
-                                data['username'],
+                                post.username,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Spacer(),
                               IconButton(
                                 icon: Icon(Icons.more_horiz),
                                 onPressed: () {
-                                  PostStorage().deletePost(data['postId'], data['publicId']);
+                                  PostStorage().deletePost(
+                                    post.postId,
+                                    publicId,
+                                  );
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text('Post Deleted')),
                                   );
@@ -106,7 +116,7 @@ class _PostsState extends State<Posts> {
                               horizontal: 12.0,
                             ),
                             child: Text(
-                              data['caption'],
+                              post.caption,
                               style: TextStyle(fontSize: 16),
                               textAlign: TextAlign.start,
                             ),
@@ -122,7 +132,7 @@ class _PostsState extends State<Posts> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             image: DecorationImage(
-                              image: NetworkImage(data['postUrl']),
+                              image: NetworkImage(post.postUrl),
                               fit: BoxFit.cover,
                             ),
                           ),

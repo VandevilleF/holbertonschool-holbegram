@@ -6,7 +6,7 @@ import 'screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(demoProjectId: "demo-holbegram-91259");
+  await Firebase.initializeApp();
 
   runApp(
     MultiProvider(
