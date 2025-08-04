@@ -19,7 +19,6 @@ class _AddImageState extends State<AddImage> {
 
   void _handlePost() async {
     final user = await AuthMethode().getUserDetails();
-    print('user document $user');
 
     PostStorage().uploadPost(
       _captionController.text,

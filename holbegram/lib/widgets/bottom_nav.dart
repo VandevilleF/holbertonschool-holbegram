@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:holbegram/screens/pages/add_image.dart';
 import 'package:holbegram/screens/pages/feed.dart';
+import 'package:holbegram/screens/pages/search.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -34,7 +35,7 @@ class _BottomNavState extends State<BottomNav> {
         controller: _pageController,
         children: [
           Feed(),
-          Center(child: Text("Search", style: TextStyle(fontSize: 32))),
+          Search(),
           AddImage(),
           Center(child: Text("Favorite", style: TextStyle(fontSize: 32))),
           Center(child: Text("Profile", style: TextStyle(fontSize: 32))),

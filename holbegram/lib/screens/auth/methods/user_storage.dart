@@ -4,9 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future<void> keyEnv() async {
-  await dotenv.load(fileName: '.env');
-}
 
 class StorageMethods {
   final String cloudinaryUrl = "https://api.cloudinary.com/v1_1/dfowm4moz/image/upload";
@@ -59,4 +56,32 @@ class StorageMethods {
       throw Exception('Failed to delete image from Cloudinary');
   }
 }
+  Future<List<String>> getUserImagesFromStorage(String userId) async {
+    if (!dotenv.isInitialized) {
+      throw Exception('Dotenv is not initialized. Call dotenv.load() first.');
+      }
+    final String apiKey = dotenv.env['API_KEY'] ?? '';
+    final String apiSecret = dotenv.env['API_SECRET'] ?? '';
+
+    final String basicAuth =
+        'Basic ${base64Encode(utf8.encode('$apiKey:$apiSecret'))}';
+
+    final uri = Uri.parse(
+        'https://api.cloudinary.com/v1_1/dfowm4moz/resources/image/upload?prefix=posts%2F$userId');
+
+    final response = await http.get(
+      uri,
+      headers: {
+        'Authorization': basicAuth,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List resources = data['resources'];
+      return resources.map<String>((img) => img['secure_url'] as String).toList();
+    } else {
+      throw Exception('Failed to fetch user images');
+    }
+  }
 }
